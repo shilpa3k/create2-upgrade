@@ -26,7 +26,7 @@ contract("Springboard", accounts => {
   });
 
   it("Upgrade wallet v1 to v2 should work", async () => {
-    const runtimeCode = Wallet.deployedBytecode;
+    let runtimeCode = Wallet.deployedBytecode;
     let tx = await springboard.execute(runtimeCode);
     assert.equal(tx.logs.length, 1, "should have 1 event log");
     assert.equal(tx.logs[0].event, "ContractCreated", "different event");
@@ -51,6 +51,9 @@ contract("Springboard", accounts => {
     // Write you code here....
     // 1) Upgrade wallet to V2
     let sd = await walletV1.die();
+
+    runtimeCode = WalletV2.deployedBytecode;
+    tx = await springboard.execute(runtimeCode);
 
     // the new wallet contract address is logged in the event log
     let walletAddress2 = tx.logs[0].args[0];
